@@ -1,8 +1,8 @@
 function Button({ style = 'primary', size = 'md', type = 'button', text, onClick, disabled }) {
     const styleClasses = {
-        primary: 'bg-blue-500 text-white',
+        primary: 'bg-blue-900 text-white',
         secondary: 'bg-gray-200 text-black',
-        danger: 'bg-red-500 text-white'
+        danger: 'bg-red-600 text-white'
     };
 
     const sizeClasses = {

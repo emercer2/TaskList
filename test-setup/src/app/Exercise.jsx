@@ -34,14 +34,28 @@ import { useState, useEffect } from 'react';
 import Button from './Components/FormFields/Button.jsx';
 
 // ============================================================================
+// COLOR PALETTE - Available colors for categories
+// ============================================================================
+const COLOR_PALETTE = {
+  red:    { border: 'border-l-red-500',    bg: 'bg-red-50',    badge: 'bg-red-400 text-white' },
+  blue:   { border: 'border-l-blue-500',   bg: 'bg-blue-50',   badge: 'bg-blue-400 text-white' },
+  green:  { border: 'border-l-green-500',  bg: 'bg-green-50',  badge: 'bg-green-400 text-white' },
+  yellow: { border: 'border-l-yellow-500', bg: 'bg-yellow-50', badge: 'bg-yellow-500 text-white' },
+  purple: { border: 'border-l-purple-500', bg: 'bg-purple-50', badge: 'bg-purple-400 text-white' },
+  orange: { border: 'border-l-orange-500', bg: 'bg-orange-50', badge: 'bg-orange-400 text-white' },
+};
+
+// ============================================================================
 // SAMPLE DATA - Start with some tasks
 // ============================================================================
 const initialTasks = [
-  { id: 1, title: 'Complete React fundamentals', completed: true, dueDate: null },
-  { id: 2, title: 'Learn useState hook', completed: true, dueDate: '2025-01-15' },
-  { id: 3, title: 'Style with Tailwind CSS', completed: false, dueDate: '2025-01-20' },
-  { id: 4, title: 'Build task list app', completed: false, dueDate: null },
+  { id: 1, title: 'Complete React fundamentals', completed: true, dueDate: null, categoryId: null },
+  { id: 2, title: 'Learn useState hook', completed: true, dueDate: '2025-01-15', categoryId: null },
+  { id: 3, title: 'Style with Tailwind CSS', completed: false, dueDate: '2025-01-20', categoryId: null },
+  { id: 4, title: 'Build task list app', completed: false, dueDate: null, categoryId: null },
 ];
+
+const initialCategories = [];
 
 // ============================================================================
 // TASK 1: TaskForm Component
@@ -55,18 +69,20 @@ const initialTasks = [
 // - Nice styling with Tailwind
 // ============================================================================
 
-function TaskForm({ onAddTask }) {
+function TaskForm({ onAddTask, categories }) {
   const [title, setTitle] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [categoryId, setCategoryId] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // TODO: Validate and call onAddTask
     if (title.trim()) {
-      onAddTask(title.trim(), dueDate || null);
+      onAddTask(title.trim(), dueDate || null, categoryId ? Number(categoryId) : null);
       //reset form
       setTitle('');
       setDueDate('');
+      setCategoryId('');
     }
   };
 
@@ -88,6 +104,16 @@ function TaskForm({ onAddTask }) {
           onChange={(e) => setDueDate(e.target.value)}
           className='border border-gray-300 rounded px-3 py-2'
         />
+        <select
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+          className='border border-gray-300 rounded px-2 py-2 text-sm'
+        >
+          <option value="">No category</option>
+          {categories.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
         <Button
           style="primary"
           text="Add"
@@ -134,6 +160,63 @@ function FilterButtons({ currentFilter, onFilterChange }) {
 }
 
 // ============================================================================
+// CategoryManager Component
+// ============================================================================
+// Props: categories, onAdd, onDelete
+// ============================================================================
+
+function CategoryManager({ categories, onAdd, onDelete }) {
+  const [name, setName] = useState('');
+  const [color, setColor] = useState('blue');
+
+  const handleAdd = () => {
+    if (name.trim()) {
+      onAdd(name.trim(), color);
+      setName('');
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      {/* Existing categories */}
+      <div className="flex flex-wrap gap-1">
+        {categories.map(cat => (
+          <span
+            key={cat.id}
+            className={`${COLOR_PALETTE[cat.color].badge} text-xs px-2 py-1 rounded-full inline-flex items-center gap-1`}
+          >
+            {cat.name}
+            <button onClick={() => onDelete(cat.id)} className="hover:opacity-70">x</button>
+          </span>
+        ))}
+      </div>
+
+      {/* Add new category */}
+      <div className="flex gap-2 items-center">
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+          placeholder="New category..."
+          className="border border-gray-300 rounded px-2 py-1 text-sm"
+        />
+        <select
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+          className="border border-gray-300 rounded px-2 py-1 text-sm"
+        >
+          {Object.keys(COLOR_PALETTE).map(c => (
+            <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
+          ))}
+        </select>
+        <Button style="primary" size="sm" text="Add" onClick={handleAdd} disabled={!name.trim()} />
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
 // TASK 3: TaskItem Component
 // ============================================================================
 // Props: task, onToggle, onDelete
@@ -145,7 +228,8 @@ function FilterButtons({ currentFilter, onFilterChange }) {
 // - Hover effects
 // ============================================================================
 
-function TaskItem({ task, index, onToggle, onDelete, onEdit, onReorder, justMoved }) {
+function TaskItem({ task, index, category, onToggle, onDelete, onEdit, onReorder, justMoved }) {
+  const catColors = category ? COLOR_PALETTE[category.color] : null;
   const [dragOver, setDragOver] = useState(false);
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState('');
@@ -202,7 +286,7 @@ function TaskItem({ task, index, onToggle, onDelete, onEdit, onReorder, justMove
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`bg-white flex items-center justify-between p-1 shadow rounded hover:shadow-md transition cursor-grab active:cursor-grabbing ${
+      className={`${catColors ? `${catColors.bg} border-l-4 ${catColors.border}` : 'bg-white'} flex items-center justify-between p-1 shadow rounded hover:shadow-md transition cursor-grab active:cursor-grabbing ${
         dragOver ? 'border-t-2 border-blue-500' : ''
       } ${justMoved ? 'animate-task-drop' : ''}`}
     >
@@ -238,15 +322,22 @@ function TaskItem({ task, index, onToggle, onDelete, onEdit, onReorder, justMove
               {task.title}
             </span>
           )}
-          {task.dueDate && (
-            <span className={`block text-xs ${
-              !task.completed && new Date(task.dueDate) < new Date()
-                ? 'text-red-500 font-semibold'
-                : 'text-gray-400'
-            }`}>
-              Due: {new Date(task.dueDate).toLocaleDateString()}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {task.dueDate && (
+              <span className={`text-xs ${
+                !task.completed && new Date(task.dueDate) < new Date()
+                  ? 'text-red-500 font-semibold'
+                  : 'text-gray-400'
+              }`}>
+                Due: {new Date(task.dueDate).toLocaleDateString()}
+              </span>
+            )}
+            {category && (
+              <span className={`${catColors.badge} text-xs px-1.5 py-0.5 rounded-full`}>
+                {category.name}
+              </span>
+            )}
+          </div>
         </div>
       </div>
       
@@ -271,7 +362,7 @@ function TaskItem({ task, index, onToggle, onDelete, onEdit, onReorder, justMove
 // - Handle empty state
 // ============================================================================
 
-function TaskList({ tasks, onToggle, onDelete, onEdit, onReorder, justMovedId }) {
+function TaskList({ tasks, categories, onToggle, onDelete, onEdit, onReorder, justMovedId }) {
   if (tasks.length === 0) {
     return (
       <p className="text-center text-gray-400 py-8">
@@ -292,6 +383,7 @@ function TaskList({ tasks, onToggle, onDelete, onEdit, onReorder, justMovedId })
                 onToggle={onToggle}
                 onDelete={onDelete}
                 onEdit={onEdit}
+                category={categories.find(c => c.id === task.categoryId) || null}
                 onReorder={onReorder}
                 justMoved={task.id === justMovedId}
             />
@@ -351,27 +443,41 @@ function TaskStats({ tasks, onClearCompleted }) {
 // ============================================================================
 
 function App() {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem('tasks');
+    return saved ? JSON.parse(saved) : initialTasks;
+  });
+  const [categories, setCategories] = useState(() => {
+    const saved = localStorage.getItem('categories');
+    return saved ? JSON.parse(saved) : initialCategories;
+  });
   const [filter, setFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState(null);
   const [justMovedId, setJustMovedId] = useState(null);
 
-  // Load tasks from localStorage after hydration
-  useEffect(() => {
-    const saved = localStorage.getItem('tasks');
-    if (saved) {
-      setTasks(JSON.parse(saved));
-    }
-  }, []);
-
-  // Save tasks to localStorage on every change
+  // Save to localStorage on every change
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
 
+  useEffect(() => {
+    localStorage.setItem('categories', JSON.stringify(categories));
+  }, [categories]);
+
+  // Category handlers
+  const handleAddCategory = (name, color) => {
+    setCategories(prev => [...prev, { id: Date.now(), name, color }]);
+  };
+
+  const handleDeleteCategory = (id) => {
+    setCategories(prev => prev.filter(c => c.id !== id));
+    setTasks(prev => prev.map(t => t.categoryId === id ? { ...t, categoryId: null } : t));
+  };
+
   // TODO: Implement handlers
-  const handleAddTask = (title, dueDate) => {
+  const handleAddTask = (title, dueDate, categoryId) => {
     // Create new task with unique id
-    setTasks(prevTasks => [...prevTasks, { id: Date.now(), title, completed: false, dueDate }]);
+    setTasks(prevTasks => [...prevTasks, { id: Date.now(), title, completed: false, dueDate, categoryId }]);
   };
 
   const handleToggleTask = (id) => {
@@ -418,9 +524,10 @@ function App() {
 
   // TODO: Implement filtering
   const filteredTasks = tasks.filter(task => {
-    if (filter === 'active') return !task.completed;
-    if (filter === 'completed') return task.completed;
-    return true; // 'all'
+    if (filter === 'active' && task.completed) return false;
+    if (filter === 'completed' && !task.completed) return false;
+    if (categoryFilter !== null && task.categoryId !== categoryFilter) return false;
+    return true;
   });
   
   return (
@@ -434,19 +541,48 @@ function App() {
         {/* Main Card */}
         <div className="bg-gray-50 rounded-xl shadow-lg p-6">
           {/* Task Form */}
-          <TaskForm onAddTask={handleAddTask} />
-          
-          {/* Filter Buttons */}
+          <TaskForm onAddTask={handleAddTask} categories={categories} />
+
+          {/* Categories */}
           <div className="my-4">
-            <FilterButtons 
-              currentFilter={filter} 
-              onFilterChange={setFilter} 
+            <CategoryManager
+              categories={categories}
+              onAdd={handleAddCategory}
+              onDelete={handleDeleteCategory}
             />
           </div>
-          
+
+          {/* Filter Buttons */}
+          <div className="my-4 space-y-2">
+            <FilterButtons
+              currentFilter={filter}
+              onFilterChange={setFilter}
+            />
+            {categories.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                <button
+                  onClick={() => setCategoryFilter(null)}
+                  className={`text-xs px-2 py-1 rounded-full ${categoryFilter === null ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-600'}`}
+                >
+                  All Categories
+                </button>
+                {categories.map(cat => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setCategoryFilter(cat.id)}
+                    className={`text-xs px-2 py-1 rounded-full ${categoryFilter === cat.id ? COLOR_PALETTE[cat.color].badge : 'bg-gray-200 text-gray-600'}`}
+                  >
+                    {cat.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Task List */}
           <TaskList
             tasks={filteredTasks}
+            categories={categories}
             onToggle={handleToggleTask}
             onDelete={handleDeleteTask}
             onEdit={handleEditTask}
