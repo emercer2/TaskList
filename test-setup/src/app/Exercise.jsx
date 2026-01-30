@@ -253,6 +253,7 @@ function TaskItem({ task, index, category, onToggle, onDelete, onEdit, onReorder
     }
   };
 
+  // dragging items
   const handleDragStart = (e) => {
     e.dataTransfer.setData('text/plain', index);
     e.dataTransfer.effectAllowed = 'move';
@@ -290,7 +291,6 @@ function TaskItem({ task, index, category, onToggle, onDelete, onEdit, onReorder
     >
       
       <div className="flex items-center gap-3 pl-2">
-        {/* Checkbox */}
         <input
           type="checkbox"
           checked={task.completed}
@@ -298,7 +298,6 @@ function TaskItem({ task, index, category, onToggle, onDelete, onEdit, onReorder
           className='focus:ring-blue-500 h-4 w-4 rounded'
         />
         
-        {/* Task title and due date */}
         <div>
           {editing ? (
             <input
