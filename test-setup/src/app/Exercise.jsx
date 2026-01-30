@@ -368,8 +368,6 @@ function TaskList({ tasks, categories, onToggle, onDelete, onEdit, onReorder, ju
 
   return (
     <ul className="flex flex-col gap-2">
-      {/* TODO: Map tasks to TaskItem components */}
-      {/* Don't forget key prop! */}
       {tasks.map((task, index) =>
             <TaskItem
                 key={task.id}
@@ -403,7 +401,6 @@ function TaskStats({ tasks, onClearCompleted }) {
 
   return (
     <div className='flex justify-between text-sm'>
-      {/* TODO: Style with Tailwind - flex justify-between, small text */}
       <span>{activeCount} tasks remaining</span>
       <div className='flex items-center gap-2'>
         <Button 
@@ -469,7 +466,6 @@ function App() {
     setTasks(prev => prev.map(t => t.categoryId === id ? { ...t, categoryId: null } : t));
   };
 
-  // TODO: Implement handlers
   const handleAddTask = (title, dueDate, categoryId) => {
     // Create new task with unique id
     setTasks(prevTasks => [...prevTasks, { id: Date.now(), title, completed: false, dueDate, categoryId }]);
@@ -485,7 +481,6 @@ function App() {
   };
 
   const handleDeleteTask = (id) => {
-    // Remove task from array
     setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
   };
 
@@ -517,7 +512,6 @@ function App() {
     return () => clearTimeout(timer);
   }, [justMovedId]);
 
-  // TODO: Implement filtering
   const filteredTasks = tasks.filter(task => {
     if (filter === 'active' && task.completed) return false;
     if (filter === 'completed' && !task.completed) return false;
