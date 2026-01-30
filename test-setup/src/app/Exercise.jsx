@@ -76,9 +76,9 @@ function TaskForm({ onAddTask, categories }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Validate and call onAddTask
     if (title.trim()) {
       onAddTask(title.trim(), dueDate || null, categoryId ? Number(categoryId) : null);
+
       //reset form
       setTitle('');
       setDueDate('');
@@ -88,8 +88,6 @@ function TaskForm({ onAddTask, categories }) {
 
   return (
     <form onSubmit={handleSubmit} className='gap-2'>
-      {/* TODO: Add styled input and button */}
-      {/* Use: flex gap-2, input styling, button styling */}
       <div className="flex gap-2">
         <input
           type="text"
