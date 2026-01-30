@@ -290,7 +290,6 @@ function TaskItem({ task, index, category, onToggle, onDelete, onEdit, onReorder
         dragOver ? 'border-t-2 border-blue-500' : ''
       } ${justMoved ? 'animate-task-drop' : ''}`}
     >
-      {/* TODO: Style the task item container */}
       
       <div className="flex items-center gap-3 pl-2">
         {/* Checkbox */}
@@ -298,8 +297,7 @@ function TaskItem({ task, index, category, onToggle, onDelete, onEdit, onReorder
           type="checkbox"
           checked={task.completed}
           onChange={() => onToggle(task.id)}
-          // TODO: Style the checkbox
-          className=''
+          className='focus:ring-blue-500 h-4 w-4 rounded'
         />
         
         {/* Task title and due date */}
