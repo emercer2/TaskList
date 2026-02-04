@@ -65,7 +65,7 @@ export default function TasksPage() {
             <Link href="/" className="hover:text-blue-600">Home</Link>
           </li>
           <li>/</li>
-          <li className="text-gray-900">Tasks</li>
+          <li className="text-gray-900">My List</li>
         </ol>
       </nav>
 
@@ -114,7 +114,7 @@ export default function TasksPage() {
         {tasks.map(task => (
           <li key={task.id}>
             <Link
-              href={'/tasks/' + task.id}
+              href={'/list/' + task.id}
               className="block p-4 border rounded-lg hover:border-blue-300 hover:shadow-md transition-all"
             >
               <div className="flex items-center justify-between">
