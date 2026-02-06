@@ -16,7 +16,7 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-sm shadow-b">
       <div className="max-w-6xl mx-auto px-4 flex justify-between items-center h-16">
-        <Link href="/" className="text-xl font-bold text-blue-600">
+        <Link href="/" className="text-xl font-bold text-accent-600">
           TaskApp
         </Link>
         <div className="flex gap-6">
@@ -28,8 +28,8 @@ export default function Navbar() {
                 href={href}
                 className={
                   isActive
-                    ? "text-blue-600 font-semibold"
-                    : "text-gray-600 hover:text-blue-600"
+                    ? "text-accent-600 font-semibold"
+                    : "text-gray-600 hover:text-accent-600"
                 }
               >
                 {label}
