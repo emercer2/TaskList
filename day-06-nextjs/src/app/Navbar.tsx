@@ -14,7 +14,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="bg-white shadow-sm shadow-b">
       <div className="max-w-6xl mx-auto px-4 flex justify-between items-center h-16">
         <Link href="/" className="text-xl font-bold text-blue-600">
           TaskApp

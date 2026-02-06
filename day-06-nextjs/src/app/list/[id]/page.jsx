@@ -44,19 +44,6 @@ export default function TaskDetailPage() {
 
   return (
     <div>
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500">
-        <ol className="flex items-center gap-1">
-          <li>
-            <Link href="/" className="hover:text-blue-600">Home</Link>
-          </li>
-          <li>/</li>
-          <li>
-            <Link href="/list" className="hover:text-blue-600">My List</Link>
-          </li>
-          <li>/</li>
-          <li className="text-gray-900">{task.title}</li>
-        </ol>
-      </nav>
 
       <div className="mt-4">
         <div className="flex items-center gap-4 mb-4">
