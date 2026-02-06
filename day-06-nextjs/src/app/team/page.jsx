@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import TaskList from '../components/TaskList';
+import Button from '../components/Button';
 
 //API Calls
 const API_URL = 'https://jsonplaceholder.typicode.com/todos';
@@ -210,12 +211,9 @@ export default function App() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-500 mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-accent-600 text-white rounded-lg"
-          >
+          <Button onClick={() => window.location.reload()} className="px-4 py-2">
             Retry
-          </button>
+          </Button>
         </div>
       </div>
     );

@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import PriorityChip from './PriorityChip';
+import Input from './Input';
+import Button from './Button';
 
 export default function TaskItem({ task, onToggle, onEdit, onDelete, isDeleting, href, index, onDragStart, onDragEnter, onDragEnd }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -73,15 +75,14 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete, isDeleting,
 
           {/* Task Title */}
           {canEdit && isEditing ? (
-            <input
+            <Input
               ref={inputRef}
               type="text"
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
               onBlur={handleSave}
               onKeyDown={handleKeyDown}
-              className="flex-1 px-2 py-1 border-2 border-accent-400 rounded
-                focus:outline-none focus:ring-2 focus:ring-accent-500"
+              className="flex-1 px-2 py-1"
             />
           ) : canEdit ? (
             <span
@@ -120,24 +121,25 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete, isDeleting,
 
         <div className="flex items-center gap-1 shrink-0">
           {/* Delete Button */}
-          <button
+          <Button
+            variant="ghost"
             onClick={() => onDelete(task.id)}
             disabled={isDeleting}
-            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50
-              rounded-lg transition-all disabled:cursor-not-allowed"
+            className="px-3 py-1 text-red-500 hover:text-red-600 hover:bg-red-50"
           >
-            {isDeleting ? '⏳' : '🗑️'}
-          </button>
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
 
           {/* Detail Link */}
           {href && (
-            <Link
+            <Button
+              as={Link}
+              variant="ghost"
               href={href}
-              className="p-2 text-gray-400 hover:text-accent-500 hover:bg-accent-50
-                rounded-lg transition-all"
+              className="px-3 py-1 hover:text-accent-600 hover:bg-accent-50"
             >
-              &rarr;
-            </Link>
+              Details
+            </Button>
           )}
         </div>
       </div>

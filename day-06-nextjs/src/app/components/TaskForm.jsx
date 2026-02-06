@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { PRIORITIES, priorityColors } from './PriorityChip';
+import Input from './Input';
+import Button from './Button';
 
 export default function TaskForm({ onSubmit, isLoading }) {
   const [title, setTitle] = useState('');
@@ -20,22 +22,18 @@ export default function TaskForm({ onSubmit, isLoading }) {
   return (
     <form onSubmit={handleSubmit} className="mb-6 space-y-3">
       <div className="flex gap-2">
-        <input
+        <Input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Add a new task..."
           disabled={isLoading}
-          className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent
-            disabled:bg-gray-100 disabled:cursor-not-allowed"
+          className="flex-1 px-4 py-3"
         />
-        <button
+        <Button
           type="submit"
           disabled={!title.trim() || isLoading}
-          className="px-6 py-3 bg-accent-600 text-white font-medium rounded-lg
-            hover:bg-accent-700 disabled:opacity-50 disabled:cursor-not-allowed
-            flex items-center gap-2"
+          className="w-36 px-6 py-3 font-medium flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
@@ -45,20 +43,19 @@ export default function TaskForm({ onSubmit, isLoading }) {
           ) : (
             'Add Task'
           )}
-        </button>
+        </Button>
       </div>
       <div className="flex gap-2">
-        <textarea
+        <Input
+          as="textarea"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description (optional)"
           rows={2}
           disabled={isLoading}
-          className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent resize-none
-            disabled:bg-gray-100 disabled:cursor-not-allowed"
+          className="flex-1 px-4 py-2 resize-none"
         />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-36 px-2">
           {PRIORITIES.map((p) => (
             <button
               key={p}
@@ -70,7 +67,7 @@ export default function TaskForm({ onSubmit, isLoading }) {
                 disabled:opacity-50 disabled:cursor-not-allowed
                 ${priorityColors[p]}
                 ${priority === p
-                  ? 'ring-2 ring-offset-2 ring-gray-400 scale-105'
+                  ? 'ring-2 ring-offset-2 ring-accent-400 scale-105'
                   : 'opacity-60 hover:opacity-100'
                 }
               `}

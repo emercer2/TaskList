@@ -32,6 +32,19 @@ export default function TaskList({ tasks, onAdd, onToggle, onEdit, onDelete, onB
 
       <div className="border-t border-gray-200 my-6" />
 
+      <div className="mb-4 flex justify-between items-center text-sm text-gray-500">
+        <span>{tasks.filter(t => !t.completed).length} remaining</span>
+        {tasks.some(t => t.completed) && (
+          <button
+            onClick={onBulkDelete}
+            className="px-3 py-1 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            Clear completed
+          </button>
+        )}
+        <span>{tasks.filter(t => t.completed).length} completed</span>
+      </div>
+
       <ul className="space-y-3">
         {tasks.map((task, index) => (
           <TaskItem
@@ -54,19 +67,6 @@ export default function TaskList({ tasks, onAdd, onToggle, onEdit, onDelete, onB
           No tasks yet. Add one above!
         </p>
       )}
-
-      <div className="mt-6 pt-4 border-t flex justify-between items-center text-sm text-gray-500">
-        <span>{tasks.filter(t => !t.completed).length} remaining</span>
-        {tasks.some(t => t.completed) && (
-          <button
-            onClick={onBulkDelete}
-            className="px-3 py-1 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-          >
-            Clear completed
-          </button>
-        )}
-        <span>{tasks.filter(t => t.completed).length} completed</span>
-      </div>
 
       {undoToast && (
         <UndoToast
