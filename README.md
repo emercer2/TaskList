@@ -12,7 +12,7 @@ I have hosted this app using Vercel (https://vercel.com)
 Run it yourself by:
 1. Pulling down the repo
 2. cd TaskListRoot
-3. build run dev
+3. npm run dev
 
 OR
 Vist the hosted version on Vercel
