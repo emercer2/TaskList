@@ -26,4 +26,5 @@ https://task-list-gamma-ruddy.vercel.app/
 <img width="1868" height="917" alt="AboutBlue" src="https://github.com/user-attachments/assets/1fa7c3df-b181-4b22-b9c9-df529638226b" />
 
 # Creation for me and nerds
+npx create-next-app@latest test-setup --typescript=false --tailwind --eslint --app --src-dir=false --import-alias="@/*"
 
