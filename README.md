@@ -16,7 +16,7 @@ Run it yourself by:
 
 OR
 Vist the hosted version on Vercel
-https://task-list-mvbsf8ia7-elizabeths-projects-98235e9b.vercel.app/
+https://task-list-gamma-ruddy.vercel.app/
 
 # App in action
 <img width="1415" height="780" alt="image" src="https://github.com/user-attachments/assets/5dc99144-fd77-4f40-be20-3b04a9d43f2e" />
