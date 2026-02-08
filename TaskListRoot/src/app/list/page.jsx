@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, startTransition } from 'react';
 import TaskList from '../components/TaskList';
 
 const initialTasks = [
@@ -10,19 +10,18 @@ const initialTasks = [
   { id: 4, title: 'Deploy to Vercel', completed: false, priority: 'low' },
 ];
 
-function loadTasks() {
-  if (typeof window === 'undefined') return initialTasks;
-  const saved = localStorage.getItem('tasks');
-  return saved ? JSON.parse(saved) : initialTasks;
-}
-
 function saveTasks(tasks) {
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 
 export default function TasksPage() {
-  const [tasks, setTasksRaw] = useState(loadTasks);
+  const [tasks, setTasksRaw] = useState(initialTasks);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('tasks');
+    if (saved) startTransition(() => setTasksRaw(JSON.parse(saved)));
+  }, []);
   const [undoToast, setUndoToast] = useState(null);
   const undoRef = useRef(null);
 

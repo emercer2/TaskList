@@ -21,7 +21,7 @@ export default function TaskForm({ onSubmit, isLoading }) {
 
   return (
     <form onSubmit={handleSubmit} className="mb-6 space-y-3">
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <Input
           type="text"
           value={title}
@@ -33,7 +33,7 @@ export default function TaskForm({ onSubmit, isLoading }) {
         <Button
           type="submit"
           disabled={!title.trim() || isLoading}
-          className="w-36 px-6 py-3 font-medium flex items-center justify-center gap-2"
+          className="hidden sm:flex w-36 px-6 py-3 font-medium items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
@@ -45,7 +45,7 @@ export default function TaskForm({ onSubmit, isLoading }) {
           )}
         </Button>
       </div>
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <Input
           as="textarea"
           value={description}
@@ -55,7 +55,7 @@ export default function TaskForm({ onSubmit, isLoading }) {
           disabled={isLoading}
           className="flex-1 px-4 py-2 resize-none"
         />
-        <div className="flex flex-col gap-2 w-36 px-2">
+        <div className="flex flex-row sm:flex-col gap-2 sm:w-36 px-2 justify-center">
           {PRIORITIES.map((p) => (
             <button
               key={p}
@@ -77,6 +77,20 @@ export default function TaskForm({ onSubmit, isLoading }) {
           ))}
         </div>
       </div>
+      <Button
+        type="submit"
+        disabled={!title.trim() || isLoading}
+        className="flex sm:hidden w-full px-6 py-3 font-medium items-center justify-center gap-2"
+      >
+        {isLoading ? (
+          <>
+            <span className="animate-spin">⏳</span>
+            Adding...
+          </>
+        ) : (
+          'Add Task'
+        )}
+      </Button>
     </form>
   );
 }
